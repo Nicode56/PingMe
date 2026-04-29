@@ -1,13 +1,24 @@
 {
   "name": "pingme",
   "private": true,
-  "version": "0.0.0",
+  "version": "1.0.0",
+  "description": "Simple reminder app that alerts you when you open the browser until tasks are complete",
+  "author": "Your Name",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/yourusername/pingme.git"
+  },
+  "homepage": "https://github.com/yourusername/pingme",
   "type": "module",
   "scripts": {
     "dev": "vite",
     "build": "vite build",
+    "preview": "vite preview",
     "lint": "eslint .",
-    "preview": "vite preview"
+    "lint:fix": "eslint . --fix",
+    "type-check": "echo 'No TypeScript yet'",
+    "test": "echo 'Tests not configured yet' && exit 0"
   },
   "dependencies": {
     "react": "^19.2.5",

@@ -39,26 +39,45 @@ VITE_MAX_REMINDERS=100
 - ✅ Sound notifications (configurable)
 - ✅ Local storage persistence
 
-## Getting Started
+## 🚀 Quick Start
 
-1. Clone the repository
-2. Copy `.env.example` to `.env.local` and configure as needed
-3. Install dependencies: `npm install`
-4. Start development server: `npm run dev`
-5. Open http://localhost:5173
+### Option 1: Automated Setup
+```bash
+# Windows
+setup.bat
 
-## Scripts
+# Mac/Linux
+bash setup.sh
+```
 
-- `npm run dev` - Start development server
-- `npm run build` - Build for production
-- `npm run preview` - Preview production build
-- `npm run lint` - Run ESLint
+### Option 2: Manual
+```bash
+npm install && cp .env.example .env.local && npm run dev
+```
 
-## Tech Stack
+## 🌐 Deployment
 
-- React 19
-- Vite
-- ESLint with React Refresh plugin
-- Web Audio API for sound notifications
-- Local Storage for data persistence
+**All platforms supported with GitHub Actions CI/CD!**
+
+- **[Netlify](DEPLOYMENT.md#netlify)** ✅ Auto-deploy
+- **[Vercel](DEPLOYMENT.md#vercel)** ✅ Auto-deploy  
+- **[Firebase](DEPLOYMENT.md#firebase-hosting)** ✅ Auto-deploy
+- **[GitHub Pages](DEPLOYMENT.md#github-pages)** ✅ Auto-deploy
+- **[Docker](DEPLOYMENT.md#docker-deployment)** & more
+
+📖 **Full guide:** [DEPLOYMENT.md](DEPLOYMENT.md) | ⚙️ **CI/CD Setup:** [.github/ACTIONS_SETUP.md](.github/ACTIONS_SETUP.md)
+
+## 📚 Documentation
+
+- **[DEPLOYMENT.md](DEPLOYMENT.md)** - Deploy to Netlify, Vercel, Firebase, GitHub Pages, AWS, Docker
+- **[.github/ACTIONS_SETUP.md](.github/ACTIONS_SETUP.md)** - GitHub Actions CI/CD setup
+- **[setup.sh / setup.bat](setup.sh)** - Automated project setup
+
+## 🏗️ Tech Stack
+
+- **React 19** - UI library
+- **Vite** - Build tool and dev server  
+- **ESLint** - Code quality
+- **Web Audio API** - Sound notifications
+- **Local Storage** - Data persistence
 
