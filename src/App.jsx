@@ -344,6 +344,11 @@ function App() {
         Set a simple reminder with time. You'll be reminded when you open the app until you complete the task.
       </p>
 
+      <div className="task-mode">
+        <span className="active">Time-Based</span>
+        <span className="disabled">Location-Based (coming soon)</span>
+      </div>
+
       <div className="input-group">
         <input
           type="text"
