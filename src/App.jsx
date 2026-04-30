@@ -352,6 +352,10 @@ function App() {
         <span className="disabled">Location-Based (coming soon)</span>
       </div>
 
+      <button className="future-feature-button" disabled title="Coming soon">
+        Location Reminder
+      </button>
+
       <div className="input-group">
         <input
           type="text"

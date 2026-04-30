@@ -254,6 +254,25 @@ li {
   line-height: 1.7;
 }
 
+.future-feature-button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 1.25rem;
+  padding: 12px 18px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.04);
+  color: #8f8f8f;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  font-weight: 700;
+  letter-spacing: 0.01em;
+  cursor: not-allowed;
+}
+
+.future-feature-button:hover {
+  background: rgba(255, 255, 255, 0.05);
+}
+
 .task-mode span {
   display: inline-flex;
   align-items: center;
