@@ -1,26 +1,13 @@
 {
   "name": "pingme",
   "private": true,
-  "version": "1.0.0",
-  "description": "Simple reminder app that alerts you when you open the browser until tasks are complete",
-  "author": "Your Name",
-  "license": "MIT",
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/Nicode56/pingme.git"
-  },
-  "homepage": "https://Nicode56.github.io/pingme",
+  "version": "0.0.0",
   "type": "module",
   "scripts": {
     "dev": "vite",
     "build": "vite build",
-    "preview": "vite preview",
     "lint": "eslint .",
-    "lint:fix": "eslint . --fix",
-    "type-check": "echo 'No TypeScript yet'",
-    "test": "echo 'Tests not configured yet' && exit 0",
-    "predeploy": "npm run build",
-    "deploy": "gh-pages -d dist"
+    "preview": "vite preview"
   },
   "dependencies": {
     "react": "^19.2.5",
@@ -35,7 +22,6 @@
     "eslint-plugin-react-hooks": "^7.1.1",
     "eslint-plugin-react-refresh": "^0.5.2",
     "globals": "^17.5.0",
-    "vite": "^8.0.10",
-    "gh-pages": "^5.0.0"
+    "vite": "^8.0.10"
   }
 }

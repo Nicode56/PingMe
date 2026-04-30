@@ -67,17 +67,18 @@ function decodeReminderData(encoded) {
   }
 }
 
-function playPingMeTone() {
-  if (!APP_CONFIG.soundEnabled) return;
+function playPingMeTone(ctx = null) {
+  if (!APP_CONFIG.soundEnabled) return ctx || null;
 
   const AudioContext = window.AudioContext || window.webkitAudioContext;
-  if (!AudioContext) return;
-  const ctx = new AudioContext();
-  const now = ctx.currentTime;
+  if (!AudioContext) return null;
+  
+  const audioContext = ctx || new AudioContext();
+  const now = audioContext.currentTime;
 
-  const pulse = ctx.createOscillator();
-  const rumble = ctx.createOscillator();
-  const gain = ctx.createGain();
+  const pulse = audioContext.createOscillator();
+  const rumble = audioContext.createOscillator();
+  const gain = audioContext.createGain();
 
   pulse.type = "square";
   rumble.type = "triangle";
@@ -94,13 +95,14 @@ function playPingMeTone() {
 
   rumble.connect(gain);
   pulse.connect(gain);
-  gain.connect(ctx.destination);
+  gain.connect(audioContext.destination);
 
   pulse.start(now);
   rumble.start(now);
   pulse.stop(now + 1.1);
   rumble.stop(now + 1.05);
-  setTimeout(() => ctx.close(), 1400);
+
+  return audioContext;
 }
 
 function App() {
@@ -117,6 +119,8 @@ function App() {
     return null;
   });
   const hasCheckedOnMount = useRef(false);
+  const audioContextRef = useRef(null);
+  const soundLoopRef = useRef(null);
   const [shareNote, setShareNote] = useState(() => {
     if (typeof window === "undefined") return "";
     const params = new URLSearchParams(window.location.search);
@@ -130,8 +134,22 @@ function App() {
     // Play sound if alertReminder is set on mount
     if (alertReminder && !hasCheckedOnMount.current) {
       hasCheckedOnMount.current = true;
-      playPingMeTone();
+      audioContextRef.current = playPingMeTone(audioContextRef.current);
+      
+      // Start looping sound
+      if (APP_CONFIG.soundEnabled) {
+        soundLoopRef.current = setInterval(() => {
+          audioContextRef.current = playPingMeTone(audioContextRef.current);
+        }, 1500);
+      }
     }
+
+    return () => {
+      if (soundLoopRef.current) {
+        clearInterval(soundLoopRef.current);
+        soundLoopRef.current = null;
+      }
+    };
   }, [alertReminder]);
 
   const triggerReminder = useCallback(
@@ -275,8 +293,22 @@ function App() {
     setImportValue("");
   };
 
+  const stopSound = () => {
+    if (soundLoopRef.current) {
+      clearInterval(soundLoopRef.current);
+      soundLoopRef.current = null;
+    }
+    if (audioContextRef.current) {
+      audioContextRef.current.close().catch(() => {});
+      audioContextRef.current = null;
+    }
+  };
+
   const snoozeAlert = () => {
     if (!alertReminder) return;
+
+    stopSound();
+    hasCheckedOnMount.current = false;
 
     const snoozeMs = 10 * 60 * 1000;
     const snoozeUntil = Date.now() + snoozeMs;
@@ -300,6 +332,8 @@ function App() {
   };
 
   const dismissAlert = () => {
+    stopSound();
+    hasCheckedOnMount.current = false;
     setAlertReminder(null);
   };
 
@@ -309,6 +343,18 @@ function App() {
       <p className="subtitle">
         Set a simple reminder with time. You'll be reminded when you open the app until you complete the task.
       </p>
+      <p className="app-description">
+        A reminder system designed to help you complete tasks when and where they matter most.
+      </p>
+
+      <div className="task-mode">
+        <span className="active">Time-Based</span>
+        <span className="disabled">Location-Based (coming soon)</span>
+      </div>
+
+      <button className="future-feature-button" disabled title="Coming soon">
+        Location Reminder
+      </button>
 
       <div className="input-group">
         <input
@@ -356,7 +402,9 @@ function App() {
       <div className="list-container">
         <h2>Saved reminders</h2>
         {reminders.length === 0 ? (
-          <p className="note">No reminders yet. Add one to stay on track.</p>
+          <p className="empty-state">
+            No tasks yet. Start by adding something you want to be reminded of—future versions will help remind you based on time or location.
+          </p>
         ) : (
           <ul>
             {reminders.map((reminder) => {
@@ -393,10 +441,40 @@ function App() {
         )}
       </div>
 
+      <div className="roadmap">
+        <h3>Coming Soon</h3>
+
+        <div className="feature">
+          <span className="feature-icon">📍</span>
+          <div>
+            <strong>Location-Based Reminders</strong>
+            <span>Trigger tasks based on where you are</span>
+          </div>
+        </div>
+
+        <div className="feature">
+          <span className="feature-icon">⏰</span>
+          <div>
+            <strong>Smart Time Notifications</strong>
+            <span>Flexible reminders that adapt to your schedule</span>
+          </div>
+        </div>
+
+        <div className="feature">
+          <span className="feature-icon">🧠</span>
+          <div>
+            <strong>ADHD-Friendly Reminder Modes</strong>
+            <span>Designed to reduce ignored notifications</span>
+          </div>
+        </div>
+      </div>
+
       {alertReminder && (
         <div className="alert-modal">
           <div className="modal-card">
-            <h2>PingMe Alert</h2>
+            <div className="modal-header">
+              <h2>🔔 PingMe Alert</h2>
+            </div>
             <p className="modal-message">
               {alertReminder.triggerReason === "location"
                 ? alertReminder.locationName
@@ -407,16 +485,21 @@ function App() {
                 : `It's time for: ${alertReminder.task}`}
             </p>
             {alertReminder.locationName && alertReminder.triggerReason === "time" && (
-              <p>Nearby target: {alertReminder.locationName}</p>
+              <p className="modal-detail">Nearby target: {alertReminder.locationName}</p>
             )}
             {alertReminder.distance != null && (
-              <p>Within {alertReminder.distance} meters.</p>
+              <p className="modal-detail">Within {alertReminder.distance} meters.</p>
             )}
             <div className="modal-actions">
               <button className="secondary-button" onClick={snoozeAlert}>
-                Snooze 10 minutes
+                ⏱️ Snooze 10 min
               </button>
-              <button onClick={dismissAlert}>Tap to acknowledge</button>
+              <button onClick={dismissAlert}>✓ Got it</button>
+              {APP_CONFIG.soundEnabled && (
+                <button className="stop-sound-button" onClick={stopSound}>
+                  🔇 Mute
+                </button>
+              )}
             </div>
           </div>
         </div>
