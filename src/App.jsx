@@ -370,7 +370,7 @@ function App() {
       </div>
 
       <button className="future-feature-button" disabled title="Coming soon">
-        Location Reminder
+        Location-Based
       </button>
 
       <div className="input-group">
