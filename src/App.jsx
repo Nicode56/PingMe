@@ -222,17 +222,22 @@ function App() {
 
   const toggleComplete = (id) => {
     const reminder = reminders.find((reminder) => reminder.id === id);
-    const isCompleting = reminder && !reminder.completed;
+    const toggledCompleted = reminder ? !reminder.completed : false;
 
     setReminders(
       reminders.map((reminder) =>
         reminder.id === id
-          ? { ...reminder, completed: !reminder.completed }
+          ? {
+              ...reminder,
+              completed: toggledCompleted,
+              triggered: toggledCompleted ? false : reminder.triggered,
+              snoozedUntil: toggledCompleted ? null : reminder.snoozedUntil,
+            }
           : reminder
       )
     );
 
-    if (isCompleting && alertReminder?.id === id) {
+    if (toggledCompleted && alertReminder?.id === id) {
       stopSound(true);
       setAlertReminder(null);
     }
