@@ -367,7 +367,6 @@ function App() {
 
       <div className="task-mode">
         <span className="active">Time-Based</span>
-        <span className="disabled">Location-Based (coming soon)</span>
       </div>
 
       <button className="future-feature-button" disabled title="Coming soon">
