@@ -221,6 +221,9 @@ function App() {
   };
 
   const toggleComplete = (id) => {
+    const reminder = reminders.find((reminder) => reminder.id === id);
+    const isCompleting = reminder && !reminder.completed;
+
     setReminders(
       reminders.map((reminder) =>
         reminder.id === id
@@ -228,6 +231,11 @@ function App() {
           : reminder
       )
     );
+
+    if (isCompleting && alertReminder?.id === id) {
+      stopSound(true);
+      setAlertReminder(null);
+    }
   };
 
   const createShareLink = (reminder) => {
@@ -293,15 +301,23 @@ function App() {
     setImportValue("");
   };
 
-  const stopSound = () => {
+  const stopSound = (finishCurrent = false) => {
     if (soundLoopRef.current) {
       clearInterval(soundLoopRef.current);
       soundLoopRef.current = null;
     }
-    if (audioContextRef.current) {
-      audioContextRef.current.close().catch(() => {});
+
+    if (!audioContextRef.current) return;
+
+    if (finishCurrent) {
+      const ctx = audioContextRef.current;
       audioContextRef.current = null;
+      setTimeout(() => ctx.close().catch(() => {}), 1300);
+      return;
     }
+
+    audioContextRef.current.close().catch(() => {});
+    audioContextRef.current = null;
   };
 
   const snoozeAlert = () => {
