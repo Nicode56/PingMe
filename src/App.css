@@ -246,6 +246,14 @@ li {
   margin-bottom: 1.4rem;
 }
 
+.app-description {
+  margin: 0 auto 1rem;
+  max-width: 520px;
+  color: #c8c8c8;
+  font-size: 0.98rem;
+  line-height: 1.7;
+}
+
 .task-mode span {
   display: inline-flex;
   align-items: center;

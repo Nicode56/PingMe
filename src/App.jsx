@@ -343,6 +343,9 @@ function App() {
       <p className="subtitle">
         Set a simple reminder with time. You'll be reminded when you open the app until you complete the task.
       </p>
+      <p className="app-description">
+        A reminder system designed to help you complete tasks when and where they matter most.
+      </p>
 
       <div className="task-mode">
         <span className="active">Time-Based</span>
