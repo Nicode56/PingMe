@@ -3,7 +3,7 @@ import "./App.css";
 
 // Environment variables with defaults
 const APP_CONFIG = {
-  name: import.meta.env.VITE_APP_NAME || "PingMe",
+  name: import.meta.env.VITE_APP_NAME || "SetPing",
   version: import.meta.env.VITE_APP_VERSION || "1.0.0",
   soundEnabled: import.meta.env.VITE_SOUND_ENABLED !== "false",
   shareEnabled: import.meta.env.VITE_SHARE_ENABLED !== "false",
