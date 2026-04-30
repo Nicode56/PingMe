@@ -390,7 +390,9 @@ function App() {
       <div className="list-container">
         <h2>Saved reminders</h2>
         {reminders.length === 0 ? (
-          <p className="note">No reminders yet. Add one to stay on track.</p>
+          <p className="empty-state">
+            No tasks yet. Start by adding something you want to be reminded of—future versions will help remind you based on time or location.
+          </p>
         ) : (
           <ul>
             {reminders.map((reminder) => {
