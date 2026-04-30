@@ -1,164 +1,81 @@
-# PingMe Deployment Guide
+# Deployment Guide
 
-Complete instructions for deploying PingMe to various platforms.
+This guide shows how to deploy PingMe to multiple hosting platforms.
 
-## Quick Start
+## 1. Netlify
 
-```bash
-# 1. Build the app
-npm run build
+### Option A: GitHub Integration
 
-# 2. Test production build locally
-npm run preview
+1. Create a Netlify account.
+2. Connect your GitHub repository.
+3. Set build command to `npm run build`.
+4. Set publish directory to `dist`.
+5. Add environment variables from `.env.production` in the Netlify site settings.
+6. Deploy.
 
-# 3. Deploy the `dist` folder to your platform
-```
-
----
-
-## GitHub Pages
-
-### Setup (One-time)
-
-1. **Enable GitHub Pages in repository settings:**
-   - Go to Settings → Pages
-   - Source: Deploy from a branch
-   - Branch: main (or your default branch)
-
-2. **Update package.json:**
-   ```json
-   {
-     "homepage": "https://yourusername.github.io/pingme"
-   }
-   ```
-
-3. **Install gh-pages package:**
-   ```bash
-   npm install --save-dev gh-pages
-   ```
-
-4. **Add deploy scripts to package.json:**
-   ```json
-   {
-     "scripts": {
-       "predeploy": "npm run build",
-       "deploy": "gh-pages -d dist"
-     }
-   }
-   ```
-
-### Deploy
-
-```bash
-npm run deploy
-```
-
-Your app will be live at: `https://yourusername.github.io/pingme`
-
----
-
-## Netlify
-
-### Method 1: Connect GitHub (Recommended)
-
-1. **Create `netlify.toml` in project root:**
-   ```toml
-   [build]
-   command = "npm run build"
-   publish = "dist"
-
-   [[redirects]]
-   from = "/*"
-   to = "/index.html"
-   status = 200
-   ```
-
-2. **Push to GitHub**
-
-3. **Visit [netlify.com](https://netlify.com):**
-   - Click "New site from Git"
-   - Select your GitHub repository
-   - Auto-detect settings (Netlify will use netlify.toml)
-   - Click "Deploy site"
-
-4. **Set environment variables:**
-   - Go to Site Settings → Build & deploy → Environment
-   - Add your `.env.production` variables
-
-### Method 2: Manual Deploy
+### Option B: Manual Deploy
 
 ```bash
 npm run build
-# Install Netlify CLI
 npm install -g netlify-cli
-
-# Deploy
 netlify deploy --prod --dir=dist
 ```
 
----
+### Redirects
 
-## Vercel
+Create `netlify.toml` in the project root:
 
-### Method 1: Connect GitHub (Recommended)
+```toml
+[build]
+  command = "npm run build"
+  publish = "dist"
 
-1. **Visit [vercel.com](https://vercel.com)** and sign in with GitHub
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200
+```
 
-2. **Import project:**
-   - Click "Add New" → "Project"
-   - Select your repository
-   - Framework: Vite
-   - Build Command: `npm run build`
-   - Output Directory: `dist`
+## 2. Vercel
 
-3. **Environment Variables:**
-   - In project settings, add variables from `.env.production`
+### GitHub Integration
 
-4. **Deploy** - Vercel auto-deploys on push
+1. Create a Vercel account.
+2. Import your GitHub repository.
+3. Set framework preset to **Vite**.
+4. Set build command to `npm run build`.
+5. Set output directory to `dist`.
+6. Add environment variables from `.env.production`.
+7. Deploy.
 
-### Method 2: CLI Deploy
+### CLI Deploy
 
 ```bash
 npm install -g vercel
-vercel
+vercel login
+vercel --prod
 ```
 
----
-
-## Firebase Hosting
+## 3. Firebase Hosting
 
 ### Setup
 
-1. **Install Firebase CLI:**
-   ```bash
-   npm install -g firebase-tools
-   ```
-
-2. **Initialize Firebase:**
-   ```bash
-   firebase login
-   firebase init hosting
-   ```
-
-   When prompted:
-   - Public directory: `dist`
-   - Single-page app: Yes
-
-3. **Create `firebase.json`:**
-   ```json
-   {
-     "hosting": {
-       "public": "dist",
-       "ignore": ["firebase.json", "**/.*", "**/node_modules/**"],
-       "rewrites": [
-         {
-           "source": "**",
-           "destination": "/index.html"
-         }
-       ]
-     }
-   }
-   ```
+1. Install Firebase CLI:
+```bash
+npm install -g firebase-tools
+```
+2. Login:
+```bash
+firebase login
+```
+3. Initialize hosting:
+```bash
+firebase init hosting
+```
+4. When prompted:
+- Select your Firebase project
+- Set public directory to `dist`
+- Choose `Yes` for single-page app
 
 ### Deploy
 
@@ -167,52 +84,42 @@ npm run build
 firebase deploy
 ```
 
-Your app will be live at: `https://your-project.firebaseapp.com`
-
----
-
-## AWS Amplify
+## 4. GitHub Pages
 
 ### Setup
 
-1. **Install Amplify CLI:**
-   ```bash
-   npm install -g @aws-amplify/cli
-   amplify configure
-   ```
-
-2. **Initialize Amplify:**
-   ```bash
-   amplify init
-   ```
-
-3. **Add hosting:**
-   ```bash
-   amplify add hosting
-   ```
-
-### Deploy
-
+1. In `package.json`, add the `homepage` field:
+```json
+"homepage": "https://yourusername.github.io/pingme"
+```
+2. Install `gh-pages`:
 ```bash
-amplify publish
+npm install --save-dev gh-pages
+```
+3. Add scripts:
+```json
+"scripts": {
+  "predeploy": "npm run build",
+  "deploy": "gh-pages -d dist"
+}
+```
+4. Deploy:
+```bash
+npm run deploy
 ```
 
----
+## 5. Docker
 
-## Docker Deployment
-
-### Create `Dockerfile`:
+### Dockerfile
 
 ```dockerfile
-# Build stage
-FROM node:18-alpine as build
+FROM node:18-alpine AS build
 WORKDIR /app
 COPY package*.json ./
 RUN npm ci
 COPY . .
 RUN npm run build
 
-# Serve stage
 FROM node:18-alpine
 WORKDIR /app
 RUN npm install -g serve
@@ -221,92 +128,38 @@ EXPOSE 3000
 CMD ["serve", "-s", "dist", "-l", "3000"]
 ```
 
-### Create `.dockerignore`:
-
-```
-node_modules
-npm-debug.log
-dist
-.git
-.gitignore
-```
-
-### Build and run:
+### Build and run
 
 ```bash
 docker build -t pingme .
 docker run -p 3000:3000 pingme
 ```
 
----
+## 6. Environment Variables
 
-## Environment Variables by Platform
+### Local development
+Copy `.env.example` to `.env.local`.
 
-### GitHub Pages / Netlify / Vercel / Firebase
+### Production
+Use `.env.production` values or set environment variables via hosting provider.
 
-Add these in your platform's environment settings:
 
-```
-VITE_APP_NAME=PingMe
-VITE_APP_VERSION=1.0.0
-VITE_SOUND_ENABLED=true
-VITE_SHARE_ENABLED=true
-VITE_TIME_REMINDERS_ENABLED=true
-VITE_MAX_REMINDERS=100
-```
+## 7. Troubleshooting
 
----
+### Build errors
 
-## CI/CD Pipeline
-
-GitHub Actions workflow is configured in `.github/workflows/deploy.yml`
-
-It automatically:
-- Runs tests on every push
-- Builds production bundle
-- Deploys to your platform on merge to main
-
----
-
-## Troubleshooting
-
-### Build fails
 ```bash
-# Clear cache
-rm -rf node_modules package-lock.json
+rm -rf node_modules dist package-lock.json
 npm install
 npm run build
 ```
 
-### Environment variables not loading
-- Ensure variables are prefixed with `VITE_`
-- Rebuild after changing env variables
-- Check platform's environment variable settings
+### Environment variables not taking effect
+- Ensure env var names start with `VITE_`
+- Restart the dev server
+- Rebuild production
 
-### App shows 404 after deployment
-- Ensure SPA redirect is configured (see platform-specific instructions)
-- Check that `dist/index.html` exists in build
-
-### Large bundle size
-```bash
-npm install --save-dev vite-plugin-compression
-# Add to vite.config.js for compression
-```
-
----
-
-## Monitoring
-
-Add monitoring to production:
-
-### Sentry (Error tracking)
-```bash
-npm install --save @sentry/react @sentry/tracing
-```
-
-### Google Analytics
-```bash
-npm install --save gtag.js
-```
-
-See `package.json` for optional dependency management.
+### GitHub Actions not triggering
+- Confirm workflow files are in `.github/workflows/`
+- Ensure repository Actions are enabled
+- Check branch names in workflow triggers

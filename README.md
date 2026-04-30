@@ -67,6 +67,12 @@ npm install && cp .env.example .env.local && npm run dev
 
 📖 **Full guide:** [DEPLOYMENT.md](DEPLOYMENT.md) | ⚙️ **CI/CD Setup:** [.github/ACTIONS_SETUP.md](.github/ACTIONS_SETUP.md)
 
+### GitHub Pages Notes
+
+- The app homepage is now set in `package.json`.
+- Deploy using `npm run deploy` after building.
+- GitHub Pages requires `gh-pages` and the `deploy` script to publish the `dist` folder.
+
 ## 📚 Documentation
 
 - **[DEPLOYMENT.md](DEPLOYMENT.md)** - Deploy to Netlify, Vercel, Firebase, GitHub Pages, AWS, Docker
