@@ -427,6 +427,34 @@ function App() {
         )}
       </div>
 
+      <div className="roadmap">
+        <h3>Coming Soon</h3>
+
+        <div className="feature">
+          <span className="feature-icon">📍</span>
+          <div>
+            <strong>Location-Based Reminders</strong>
+            <span>Trigger tasks based on where you are</span>
+          </div>
+        </div>
+
+        <div className="feature">
+          <span className="feature-icon">⏰</span>
+          <div>
+            <strong>Smart Time Notifications</strong>
+            <span>Flexible reminders that adapt to your schedule</span>
+          </div>
+        </div>
+
+        <div className="feature">
+          <span className="feature-icon">🧠</span>
+          <div>
+            <strong>ADHD-Friendly Reminder Modes</strong>
+            <span>Designed to reduce ignored notifications</span>
+          </div>
+        </div>
+      </div>
+
       {alertReminder && (
         <div className="alert-modal">
           <div className="modal-card">

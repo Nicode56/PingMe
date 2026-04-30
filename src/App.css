@@ -298,6 +298,56 @@ li {
   transition: transform 0.2s, box-shadow 0.2s;
 }
 
+.roadmap {
+  margin-top: 1.75rem;
+  padding: 20px;
+  border-radius: 18px;
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.04), rgba(255, 255, 255, 0.02));
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  backdrop-filter: blur(10px);
+}
+
+.roadmap h3 {
+  margin: 0 0 16px;
+  font-size: 1.15rem;
+  color: #ffb03b;
+}
+
+.feature {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 12px;
+  align-items: start;
+  padding: 14px 0;
+  border-top: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.feature:first-of-type {
+  border-top: none;
+}
+
+.feature-icon {
+  width: 36px;
+  height: 36px;
+  display: grid;
+  place-items: center;
+  border-radius: 12px;
+  background: rgba(255, 77, 109, 0.12);
+  color: #ffb03b;
+  font-size: 1.1rem;
+}
+
+.feature strong {
+  display: block;
+  color: white;
+  margin-bottom: 4px;
+}
+
+.feature span {
+  color: #c5c5c5;
+  font-size: 0.95rem;
+  line-height: 1.4;
+}
 .list-container li:hover {
   transform: translateY(-1px);
   box-shadow: 0 12px 25px rgba(0, 0, 0, 0.15);
