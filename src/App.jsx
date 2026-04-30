@@ -494,7 +494,7 @@ function App() {
         <div className="alert-modal">
           <div className="modal-card">
             <div className="modal-header">
-              <h2>🔔 PingMe Alert</h2>
+              <h2>🔔 SetPing Alert</h2>
             </div>
             <p className="modal-message">
               {alertReminder.triggerReason === "location"
